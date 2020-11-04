@@ -5,7 +5,7 @@ canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
 let particlesArray = [];
-const numberOfParticles = 20;
+const numberOfParticles = 1500;
 const mouse = {
   x: null,
   y: null,
@@ -42,10 +42,28 @@ class Particle {
     let dx = mouse.x - this.x;
     let dy = mouse.y - this.y;
     let distance = Math.sqrt(dx * dx + dy * dy);
-    if (distance < 500){
-      this.size = 50;
+
+    let forceDirectionX = dx/distance;
+    let forceDirectionY = dy/distance;
+
+    const maxDistance = mouse.radius;
+    const force = (maxDistance - distance) / maxDistance;
+    const directionX = forceDirectionX * force * this.density;
+    const directionY = forceDirectionY * force * this.density;
+
+    if (distance < mouse.radius){
+      this.x -= directionX;
+      this.y -= directionY;
+      // this.size = 50;
     } else {
-      this.size = 3;
+      if (this.x !== this.baseX){
+        const dx = this.x - this.baseX;
+        this.x -= dx/10;
+      }
+      if (this.y !== this.baseY){
+        const dy = this.y - this.baseY;
+        this.y -= dy/10;
+      }
     }
   }
 }
@@ -53,8 +71,8 @@ class Particle {
 function init() {
   particlesArray = [];
   for (let i = 0; i < numberOfParticles; i++){
-    const x = Math.random() * 500;
-    const y = Math.random() * 500;
+    const x = Math.random() * 1000;
+    const y = Math.random() * 1000;
     particlesArray.push(new Particle(x, y ));
   }
 }
