@@ -5,7 +5,6 @@ canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
 let particlesArray = [];
-const numberOfParticles = 1500;
 const mouse = {
   x: null,
   y: null,
@@ -20,8 +19,8 @@ window.addEventListener("mousemove", function (event) {
 ctx.fillStyle = "white";
 ctx.font = "30px Verdana";
 ctx.fillText("ABRACADABRA", 100,60);
-// const data = ctx.getImageData(0,0, 100, 10);
-
+const textCoordinates = ctx.getImageData(0,0, 400, 200);
+ctx.putImageData(textCoordinates, 150, 200);
 class Particle {
   constructor(x,y) {
     this.x = x;
@@ -69,11 +68,14 @@ class Particle {
 }
 
 function init() {
-  particlesArray = [];
-  for (let i = 0; i < numberOfParticles; i++){
-    const x = Math.random() * 1000;
-    const y = Math.random() * 1000;
-    particlesArray.push(new Particle(x, y ));
+  for (let y = 0, y2 = textCoordinates.height; y < y2; y++){
+    for (let x = 0, x2 = textCoordinates.width; x < x2; x++) {
+      if (textCoordinates.data[(y * 4 * textCoordinates.width) + ( x * 4 ) + 3 ] > 128){
+        let positionX = x;
+        let positionY = y;
+        particlesArray.push(new Particle(positionX * 10, positionY * 10));
+      }
+    }
   }
 }
 init();
