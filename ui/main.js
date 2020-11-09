@@ -4,11 +4,14 @@ const ctx = canvas.getContext("2d");
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
+let adjustX = -90;
+let adjustY = -25;
+
 let particlesArray = [];
 const mouse = {
   x: null,
   y: null,
-  radius: 150
+  radius: 200
 };
 
 window.addEventListener("mousemove", function (event) {
@@ -18,9 +21,9 @@ window.addEventListener("mousemove", function (event) {
 
 ctx.fillStyle = "white";
 ctx.font = "30px Verdana";
-ctx.fillText("ABRACADABRA", 100,60);
-const textCoordinates = ctx.getImageData(0,0, 400, 200);
-ctx.putImageData(textCoordinates, 150, 200);
+ctx.fillText("IVI", 100,60);
+const textCoordinates = ctx.getImageData(0,0, 200, 100);
+// ctx.putImageData(textCoordinates, 150, 200);
 class Particle {
   constructor(x,y) {
     this.x = x;
@@ -71,9 +74,9 @@ function init() {
   for (let y = 0, y2 = textCoordinates.height; y < y2; y++){
     for (let x = 0, x2 = textCoordinates.width; x < x2; x++) {
       if (textCoordinates.data[(y * 4 * textCoordinates.width) + ( x * 4 ) + 3 ] > 128){
-        let positionX = x;
-        let positionY = y;
-        particlesArray.push(new Particle(positionX * 10, positionY * 10));
+        let positionX = x + adjustX;
+        let positionY = y + adjustY;
+        particlesArray.push(new Particle(positionX * 15, positionY * 15));
       }
     }
   }
@@ -81,11 +84,33 @@ function init() {
 init();
 
 function animate() {
-  ctx.clearRect(0,0, canvas.width, canvas.height);
+   ctx.clearRect(0,0, canvas.width, canvas.height);
   for(let i = 0; i < particlesArray.length; i++){
     particlesArray[i].draw();
     particlesArray[i].update();
   }
+  connect();
   requestAnimationFrame(animate);
 }
 animate();
+
+function connect() {
+  let opacityValue = 1;
+  for (let a = 0; a < particlesArray.length; a++) {
+    for (let b = 0; b < particlesArray.length; b++) {
+      let dx = particlesArray[a].x - particlesArray[b].x;
+      let dy = particlesArray[a].y - particlesArray[b].y;
+      let distance = Math.sqrt(dx * dx + dy * dy);
+
+      if (distance < 25) {
+        opacityValue = 1 - (distance/50);
+        ctx.strokeStyle = `rgba(255,255,255, ${opacityValue})`;
+        ctx.lineWidth = 0.5;
+        ctx.beginPath();
+        ctx.moveTo(particlesArray[a].x, particlesArray[a].y);
+        ctx.lineTo(particlesArray[b].x, particlesArray[b].y);
+        ctx.stroke();
+      }
+    }
+  }
+}
