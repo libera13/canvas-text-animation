@@ -4,8 +4,8 @@ const ctx = canvas.getContext("2d");
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
-let adjustX = -90;
-let adjustY = -25;
+let adjustX = 90;
+let adjustY = 25;
 
 let particlesArray = [];
 const mouse = {
@@ -19,9 +19,14 @@ window.addEventListener("mousemove", function (event) {
   mouse.y = event.y;
 });
 
-ctx.fillStyle = "white";
-ctx.font = "30px Verdana";
-ctx.fillText("IVI", 100,60);
+const image = new Image(100, 100);
+image.src = "ui/accordion.svg";
+ctx.drawImage(image, 0, 0, 100, 100);
+
+//
+// // ctx.fillStyle = "white";
+// // ctx.font = "30px Verdana";
+// // ctx.fillText("IVI", 100,60);
 const textCoordinates = ctx.getImageData(0,0, 200, 100);
 // ctx.putImageData(textCoordinates, 150, 200);
 class Particle {
@@ -102,7 +107,7 @@ function connect() {
       let dy = particlesArray[a].y - particlesArray[b].y;
       let distance = Math.sqrt(dx * dx + dy * dy);
 
-      if (distance < 25) {
+      if (distance < 30) {
         opacityValue = 1 - (distance/50);
         ctx.strokeStyle = `rgba(255,255,255, ${opacityValue})`;
         ctx.lineWidth = 0.5;
