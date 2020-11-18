@@ -4,8 +4,8 @@ const ctx = canvas.getContext("2d");
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
-let adjustX = -90;
-let adjustY = -25;
+let adjustX = -93;
+let adjustY = -30;
 
 let particlesArray = [];
 const mouse = {
@@ -21,7 +21,7 @@ window.addEventListener("mousemove", function (event) {
 
 ctx.fillStyle = "white";
 ctx.font = "30px Verdana";
-ctx.fillText("IVI", 100,60);
+ctx.fillText("IIMM", 100,60);
 const textCoordinates = ctx.getImageData(0,0, 200, 100);
 // ctx.putImageData(textCoordinates, 150, 200);
 class Particle {
